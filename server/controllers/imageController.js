@@ -39,7 +39,6 @@ const postNewImage = asyncHandler(async (req, res) => {
   // Create
   const newImage = await image.create({
     data: {
-      filename: 'test.png',
       user_id: id,
       description,
       percentage,
