@@ -24,7 +24,8 @@ model Image {
   @@map(name: "image")
   id          Int       @id @default(autoincrement())
   filename    String    @db.VarChar(128)
-  faces       Int       @default(0)
+  description String    @db.VarChar(128)
+  percentage  Int       @default(0)
   created_at  DateTime  @default(now())
   user        User      @relation(fields: [user_id], references: [id])
   user_id     Int

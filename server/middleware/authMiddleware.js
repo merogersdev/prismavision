@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 const { user } = new PrismaClient();
 
+// Protect Route Middleware
 const protectRoute = asyncHandler(async (req, res, next) => {
   let token;
   const authToken = req.headers.authorization;

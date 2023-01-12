@@ -28,6 +28,7 @@ const postLoginUser = asyncHandler(async (req, res) => {
       email: true,
       id: true,
       password: true,
+      images: true,
     },
   });
 
@@ -45,6 +46,7 @@ const postLoginUser = asyncHandler(async (req, res) => {
         token: jwt.sign({ id: userExists.id }, process.env.JWT_SECRET, {
           expiresIn: '1d',
         }),
+        images: userExists.images,
       },
     });
   } else {
