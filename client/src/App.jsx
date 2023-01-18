@@ -1,13 +1,11 @@
-import Header from './components/Header/Header';
+import Header from './components/Header';
+import Particle from './components/Particle';
 
 function App() {
   return (
     <div className='font-app'>
+      <Particle />
       <Header />
-      <form className='form'>
-        <input className='form__input' placeholder='derp' />
-        Message: {import.meta.env.VITE_SERVER_URL}
-      </form>
     </div>
   );
 }
