@@ -10,7 +10,7 @@
   box-sizing: border-box;
 }
 
-/* --- Tailwind Base --- */
+/* --- Tailwind Base Packages --- */
 
 @tailwind base;
 @tailwind components;
@@ -19,5 +19,5 @@
 /* --- Tailwind Custom Selectors --- */
 
 .container {
-  @apply font-app;
+  @apply max-w-6xl mx-auto flex items-center justify-between;
 }

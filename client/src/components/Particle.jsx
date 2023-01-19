@@ -12,6 +12,10 @@ function Particle() {
   }, []);
 
   const options = {
+    fullScreen: {
+      enable: true,
+      zIndex: -1,
+    },
     background: {
       color: {
         value: '#fff',
@@ -29,6 +33,7 @@ function Particle() {
           mode: 'repulse',
         },
         resize: true,
+        detectsOn: 'window',
       },
       modes: {
         push: {
@@ -85,12 +90,14 @@ function Particle() {
   };
 
   return (
-    <Particles
-      id='tsparticles'
-      init={particlesInit}
-      loaded={particlesLoaded}
-      options={options}
-    />
+    <div className='z-0'>
+      <Particles
+        id='tsparticles'
+        init={particlesInit}
+        loaded={particlesLoaded}
+        options={options}
+      />
+    </div>
   );
 }
 
