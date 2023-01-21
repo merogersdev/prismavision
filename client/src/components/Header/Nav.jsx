@@ -1,13 +1,33 @@
 import React, { useState } from 'react';
 
+import NavMenu from './NavMenu';
+import MobileMenu from './MobileMenu';
+
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const user = null;
+
+  const navItems = [
+    {
+      name: 'Home',
+      link: '/',
+    },
+    {
+      name: 'Sign Up',
+      link: '/signup',
+    },
+    {
+      name: `${user ? 'Logout' : 'Login'}`,
+      link: `${user ? '/logout' : '/login'}`,
+    },
+  ];
   return (
-    <nav
-      className='flex p-1 cursor-pointer hover:text-secondary-300 transition ease-linear duration-100 font-normal relative z-20'
-      onClick={() => setIsOpen(!isOpen)}
-    >
-      <div className='md:hidden relative z-20'>
+    <nav className='flex mr-2 relative '>
+      <div
+        className='md:hidden cursor-pointer z-20'
+        onClick={() => setIsOpen(!isOpen)}
+      >
         {isOpen ? (
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -36,15 +56,8 @@ function Nav() {
           </svg>
         )}
       </div>
-      <ul
-        className={`m-0 text-secondary-200 py-2 px-5 md:p-2 fixed right-0 md:static flex flex-col md:justify-center  md:flex-row bg-white w-full md:w-auto transition-all duration-300 ease-in ${
-          isOpen ? ' top-[3.3rem]' : ' top-[-7rem]'
-        }`}
-      >
-        <li className='hover:text-secondary-300'>Home</li>
-        <li className='ml-0 md:ml-4 hover:text-secondary-300'>Login</li>
-        <li className='ml-0 md:ml-4 hover:text-secondary-300'>Sign Up</li>
-      </ul>
+      <NavMenu items={navItems} />
+      <MobileMenu items={navItems} isOpen={isOpen} />
     </nav>
   );
 }
