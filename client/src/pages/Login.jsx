@@ -1,4 +1,4 @@
-function Login() {
+export default function Login() {
   return (
     <main className='container flex flex-col'>
       <form className='card flex flex-col items-center'>
@@ -18,5 +18,3 @@ function Login() {
     </main>
   );
 }
-
-export default Login;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import NavMenu from './NavMenu';
-import MobileMenu from './MobileMenu';
+import NavMenuMobile from './NavMenuMobile';
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,7 +57,7 @@ function Nav() {
         )}
       </div>
       <NavMenu items={navItems} />
-      <MobileMenu items={navItems} isOpen={isOpen} />
+      <NavMenuMobile items={navItems} isOpen={isOpen} />
     </nav>
   );
 }
