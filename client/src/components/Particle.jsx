@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import Particles from 'react-particles';
 import { loadFull } from 'tsparticles';
 
-function Particle() {
+export default function Particle() {
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
   }, []);
@@ -100,5 +100,3 @@ function Particle() {
     </div>
   );
 }
-
-export default Particle;

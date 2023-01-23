@@ -1,4 +1,4 @@
-function SignUp() {
+export default function SignUp() {
   return (
     <main className='container flex flex-col'>
       <form className='card flex flex-col items-center'>
@@ -26,5 +26,3 @@ function SignUp() {
     </main>
   );
 }
-
-export default SignUp;

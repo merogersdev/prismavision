@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-function NavMenu({ items }) {
+export default function NavMenu({ items }) {
   return (
     <ul className='hidden md:flex md:flex-row md:bg-white md:relative md:top-0 md:pt-0 md:px-0 md:shadow-none text-xl font-semibold'>
       {items?.map((item) => (
@@ -14,5 +14,3 @@ function NavMenu({ items }) {
     </ul>
   );
 }
-
-export default NavMenu;

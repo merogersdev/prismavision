@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-function NavMenuMobile({ items, isOpen }) {
+export default function NavMenuMobile({ items, isOpen }) {
   return (
     <ul
       className={`flex flex-col items-center justify-center px-5 fixed ${
@@ -18,5 +18,3 @@ function NavMenuMobile({ items, isOpen }) {
     </ul>
   );
 }
-
-export default NavMenuMobile;

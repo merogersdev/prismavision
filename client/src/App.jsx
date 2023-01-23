@@ -11,7 +11,7 @@ import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 
-function App() {
+export default function App() {
   return (
     <div className='font-app'>
       <Particle />
@@ -26,5 +26,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

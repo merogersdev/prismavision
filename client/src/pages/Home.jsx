@@ -1,6 +1,6 @@
 import images from '../assets/images.svg';
 
-function Home() {
+export default function Home() {
   return (
     <main className='flex flex-col'>
       <div className='container flex py-24 p-5'>
@@ -86,5 +86,3 @@ function Home() {
     </main>
   );
 }
-
-export default Home;

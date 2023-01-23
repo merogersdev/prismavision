@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import NavMenu from './NavMenu';
 import NavMenuMobile from './NavMenuMobile';
 
-function Nav() {
+export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
 
   const user = null;
@@ -61,5 +61,3 @@ function Nav() {
     </nav>
   );
 }
-
-export default Nav;

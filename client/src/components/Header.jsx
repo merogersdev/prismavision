@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
 
-function Header({ title }) {
+export default function Header({ title }) {
   return (
     <header className='h-16 px-2 shadow flex bg-white '>
       <div className='container'>
@@ -29,5 +29,3 @@ function Header({ title }) {
     </header>
   );
 }
-
-export default Header;
