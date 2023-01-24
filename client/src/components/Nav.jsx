@@ -6,8 +6,6 @@ import NavMenuMobile from './NavMenuMobile';
 export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const user = null;
-
   const navItems = [
     {
       name: 'Home',
@@ -17,13 +15,9 @@ export default function Nav() {
       name: 'Sign Up',
       link: '/signup',
     },
-    {
-      name: `${user ? 'Logout' : 'Login'}`,
-      link: `${user ? '/logout' : '/login'}`,
-    },
   ];
   return (
-    <nav className='flex mr-2 relative '>
+    <nav className='flex mr-2 relative'>
       <div
         className='md:hidden cursor-pointer z-20'
         onClick={() => setIsOpen(!isOpen)}

@@ -49,3 +49,7 @@ body {
 .labelspan {
   @apply absolute bottom-9 left-2 bg-white px-2 text-secondary-200;
 }
+
+.error {
+  @apply text-red-500 text-sm;
+}

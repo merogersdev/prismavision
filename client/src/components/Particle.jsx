@@ -8,7 +8,7 @@ export default function Particle() {
   }, []);
 
   const particlesLoaded = useCallback(async (container) => {
-    await console.log(container);
+    return await container;
   }, []);
 
   const options = {
