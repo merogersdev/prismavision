@@ -39,7 +39,7 @@ export const login = createAsyncThunk(
     try {
       const response = await server.post('/api/users/login', userData);
       if (response.data) {
-        await localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem('user', JSON.stringify(response.data));
       }
       return response.data;
     } catch (error) {

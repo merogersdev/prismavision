@@ -39,6 +39,8 @@ const postLoginUser = asyncHandler(async (req, res) => {
 
   const match = await bcrypt.compare(password, userExists.password);
 
+  console.log(match);
+
   if (match) {
     res.status(200).json({
       user: {

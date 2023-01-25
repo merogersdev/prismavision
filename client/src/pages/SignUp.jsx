@@ -1,7 +1,22 @@
-import { FormikContext, useFormik } from 'formik';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import { toast } from 'react-toastify';
+
+import { register } from '../features/auth/authSlice';
+import Loader from '../components/Loader';
+
 export default function SignUp() {
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isRegisterSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -24,10 +39,31 @@ export default function SignUp() {
         'Passwords must match'
       ),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (values, { resetForm }) => {
+      dispatch(
+        register({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        })
+      );
+      resetForm();
     },
   });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isRegisterSuccess) {
+      toast.success(`User ${user.email} signed up successfully!`);
+    }
+  }, [user, isError, isRegisterSuccess, message, dispatch]);
+
+  if (isLoading) {
+    <Loader />;
+  }
 
   return (
     <main className='container flex flex-col'>

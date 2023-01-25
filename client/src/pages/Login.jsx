@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -7,9 +8,11 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
 import { login } from '../features/auth/authSlice';
+import Loader from '../components/Loader';
 
 export default function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { user, isLoading, isError, isLoginSuccess, message } = useSelector(
     (state) => state.auth
@@ -39,12 +42,13 @@ export default function Login() {
     }
 
     if (isLoginSuccess) {
-      toast.success(`User ${user.name} logged in!`);
+      toast.success(`User ${user.email} logged in!`);
+      navigate('/dashboard');
     }
   }, [user, isError, isLoginSuccess, message, dispatch]);
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    <Loader />;
   }
 
   return (
