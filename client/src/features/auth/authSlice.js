@@ -14,6 +14,13 @@ const initialState = {
   message: '',
 };
 
+const errorHandler = (error) => {
+  return (message =
+    (error.response && error.response.data && error.response.data.message) ||
+    error.message ||
+    error.toString());
+};
+
 // Register
 export const register = createAsyncThunk(
   'auth/register',
@@ -27,7 +34,7 @@ export const register = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(errorHandler(error.message));
     }
   }
 );
@@ -43,7 +50,7 @@ export const login = createAsyncThunk(
       }
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(errorHandler(error.message));
     }
   }
 );

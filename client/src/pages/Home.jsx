@@ -1,4 +1,4 @@
-import images from '../assets/images.svg';
+import images from '/img/images.svg';
 
 export default function Home() {
   return (
