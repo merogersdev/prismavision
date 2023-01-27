@@ -2,11 +2,24 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import server from '../../axios/server';
 
-// Get user from LocalStorage
-const user = JSON.parse(localStorage.getItem('user'));
+// Fetch user details from Local Storage, else return null value - Makes TypeScript happy.
+const getUser = () => {
+  const userDetails = localStorage.getItem('user');
+  if (userDetails == null) return null;
+  return JSON.parse(userDetails);
+};
 
-const initialState = {
-  user: user ? user : null,
+type InitialStateProps = {
+  user: object | null;
+  isError: boolean;
+  isRegisterSuccess: boolean;
+  isLoginSuccess: boolean;
+  isLoading: boolean;
+  message: string | unknown;
+};
+
+const initialState: InitialStateProps = {
+  user: getUser(),
   isError: false,
   isRegisterSuccess: false,
   isLoginSuccess: false,
@@ -14,11 +27,43 @@ const initialState = {
   message: '',
 };
 
-const errorHandler = (error) => {
-  return (message =
+type Error = {
+  message: string;
+  response: {
+    data: {
+      message: string;
+    };
+  };
+};
+
+type Data = {
+  data: {
+    user: User | null;
+    isError: boolean;
+    isRegisterSuccess: boolean;
+    isLoginSuccess: boolean;
+    isLoading: boolean;
+    message: string | unknown;
+  };
+};
+
+type User = {
+  name: string;
+  email: string;
+  token: string;
+  images: [];
+};
+
+type Logout = {
+  fulfilled: boolean;
+};
+
+const errorHandler = (error: Error) => {
+  return (
     (error.response && error.response.data && error.response.data.message) ||
     error.message ||
-    error.toString());
+    error.toString()
+  );
 };
 
 // Register
@@ -26,14 +71,14 @@ export const register = createAsyncThunk(
   'auth/register',
   async (userData, thunkAPI) => {
     try {
-      const response = await server.post('/api/users/', userData);
+      const response: Data = await server.post('/api/users/', userData);
 
       if (response.data) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
 
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return thunkAPI.rejectWithValue(errorHandler(error.message));
     }
   }
@@ -49,7 +94,7 @@ export const login = createAsyncThunk(
         localStorage.setItem('user', JSON.stringify(response.data));
       }
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return thunkAPI.rejectWithValue(errorHandler(error.message));
     }
   }

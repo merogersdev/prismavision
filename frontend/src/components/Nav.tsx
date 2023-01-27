@@ -1,21 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import NavMenu from './NavMenu';
 import NavMenuMobile from './NavMenuMobile';
 
 export default function Nav() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const navItems = [
-    {
-      name: 'Home',
-      link: '/',
-    },
-    {
-      name: 'Sign Up',
-      link: '/signup',
-    },
-  ];
   return (
     <nav className='flex mr-2 relative'>
       <div
@@ -50,8 +40,8 @@ export default function Nav() {
           </svg>
         )}
       </div>
-      <NavMenu items={navItems} />
-      <NavMenuMobile items={navItems} isOpen={isOpen} />
+      <NavMenu />
+      <NavMenuMobile isOpen={isOpen} />
     </nav>
   );
 }

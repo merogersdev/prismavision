@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 export default function Dashboard() {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.auth);
 
   // If no user found, redirect to login
   if (!user) {

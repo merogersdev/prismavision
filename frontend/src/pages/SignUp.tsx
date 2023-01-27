@@ -10,11 +10,17 @@ import { toast } from 'react-toastify';
 import { register } from '../features/auth/authSlice';
 import Loader from '../components/Loader';
 
+type Register = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 export default function SignUp() {
   const dispatch = useDispatch();
 
   const { user, isLoading, isError, isRegisterSuccess, message } = useSelector(
-    (state) => state.auth
+    (state: any) => state.auth
   );
 
   const formik = useFormik({
@@ -146,7 +152,7 @@ export default function SignUp() {
         ) : null}
         <button
           className='btn bg-cta-200 hover:bg-cta-100 w-full mt-6'
-          type='submit  t75ygv f5'
+          type='submit'
         >
           Sign Up
         </button>

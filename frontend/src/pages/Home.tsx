@@ -2,8 +2,8 @@ import images from '/img/images.svg';
 
 export default function Home() {
   return (
-    <main className='flex flex-col'>
-      <div className='container flex py-24 p-5'>
+    <main className='flex flex-col h-full'>
+      <div className='container flex p-5 grow'>
         <div className='flex flex-col mr-0 w-full  justify-center items-center md:w-2/4 md:mr-8 md:items-start '>
           <h1 className='h1'>Welcome to PrismaVision!</h1>
           <p className='mb-6 leading-7'>
@@ -19,7 +19,7 @@ export default function Home() {
           <img src={images} alt='' className='max-h-72' />
         </div>
       </div>
-      <div className='bg-gray-200/50'>
+      <div className='bg-slate-200/50'>
         <div className='flex flex-col px-5 py-10 md:flex-row max-w-6xl mx-auto'>
           <div className='mr-0 mb-16 md:mb-0 md:mr-16 w-full flex items-center md:items-start flex-col'>
             <svg

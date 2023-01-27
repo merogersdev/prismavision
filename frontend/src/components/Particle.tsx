@@ -3,15 +3,15 @@ import Particles from 'react-particles';
 import { loadFull } from 'tsparticles';
 
 export default function Particle() {
-  const particlesInit = useCallback(async (engine) => {
+  const particlesInit = useCallback(async (engine: any) => {
     await loadFull(engine);
   }, []);
 
-  const particlesLoaded = useCallback(async (container) => {
+  const particlesLoaded = useCallback(async (container: any) => {
     return await container;
   }, []);
 
-  const options = {
+  const options: object = {
     fullScreen: {
       enable: true,
       zIndex: -1,

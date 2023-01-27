@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { AppDispatch } from '../app/store';
 import { logout, reset } from '../features/auth/authSlice';
 
-export default function NavMenu({ items }) {
-  const { user } = useSelector((state) => state.auth);
+export default function NavMenu() {
+  const { user } = useSelector((state: any) => state.auth);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const onLogout = () => {
     dispatch(logout());
@@ -14,14 +14,13 @@ export default function NavMenu({ items }) {
   };
   return (
     <ul className='hidden md:items-center md:flex md:flex-row md:bg-white md:relative md:top-0 md:pt-0 md:px-0 md:shadow-none text-xl font-semibold'>
-      {items?.map((item) => (
-        <li
-          key={item.name}
-          className='ml-0 py-2 md:ml-8 hover:text-secondary-200 transition ease-linear duration-100 '
-        >
-          <NavLink to={item.link}>{item.name}</NavLink>
-        </li>
-      ))}
+      <li className='ml-0 py-2 md:ml-8 hover:text-secondary-200 transition ease-linear duration-100 '>
+        <NavLink to='/'>Home</NavLink>
+      </li>
+      <li className='ml-0 py-2 md:ml-8 hover:text-secondary-200 transition ease-linear duration-100 '>
+        <NavLink to='/signup'>Sign Up</NavLink>
+      </li>
+
       <li>
         {user ? (
           <button
