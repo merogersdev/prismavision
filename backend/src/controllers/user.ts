@@ -2,7 +2,6 @@ import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 import env from "../util/validateEnv";
 
 const saltRounds = 10;
@@ -37,7 +36,6 @@ ACCESS: Public
 
 export const postNewUser: RequestHandler = async (req, res, next) => {
   const { email, password } = req.body;
-
   try {
     if (!email) throw Error("Email required");
     if (!password) throw Error("Password required");
@@ -69,11 +67,9 @@ ACCESS: Public
 
 export const postLoginUser: RequestHandler = async (req, res, next) => {
   const { email, password } = req.body;
-
   try {
     if (!email) throw Error("Email required");
     if (!password) throw Error("Password required");
-
     const userExists = await prisma.user.findUnique({
       where: {
         email,
@@ -85,9 +81,7 @@ export const postLoginUser: RequestHandler = async (req, res, next) => {
         images: true,
       },
     });
-
     if (!userExists) throw Error("User does not exist");
-
     bcrypt.compare(
       password,
       userExists?.password || "",
@@ -121,10 +115,8 @@ ACCESS: Private
 
 export const getUserDetails: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
-
   try {
     if (!id) throw Error("No user ID found");
-
     const user = await prisma.user.findUnique({
       where: {
         id: +id,
@@ -135,7 +127,6 @@ export const getUserDetails: RequestHandler = async (req, res, next) => {
         images: true,
       },
     });
-
     if (user) {
       res.status(200).json(user);
     } else {

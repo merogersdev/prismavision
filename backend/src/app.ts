@@ -1,9 +1,9 @@
 import express from "express";
 import userRoutes from "./routes/user";
 import imageRoutes from "./routes/image";
+import statRoutes from "./routes/stat";
 import morgan from "morgan";
 import createHttpError from "http-errors";
-
 import errorHandler from "./middleware/errorHandler";
 
 const app = express();
@@ -29,6 +29,7 @@ app.use(morgan("tiny"));
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/images", imageRoutes);
+app.use("/api/stats", statRoutes);
 
 // 404 Catch
 app.use((_req, _res, next) => {
