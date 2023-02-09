@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import vision from "@google-cloud/vision";
-import createHttpError from "http-errors";
 
 // Creates a client
 const client = new vision.ImageAnnotatorClient();
@@ -24,6 +23,6 @@ export const postProcessImage: RequestHandler = async (req, res, next) => {
     res.status(200).json(labels);
   } catch (error) {
     console.error(error);
-    next(createHttpError(500, "Cannot process image"));
+    next(error);
   }
 };

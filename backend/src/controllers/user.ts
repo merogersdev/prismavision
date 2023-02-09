@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
-import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -26,7 +25,7 @@ export const getAllUsers: RequestHandler = async (_req, res, next) => {
     res.status(200).json(allUsers);
   } catch (error) {
     console.error(error);
-    next(createHttpError(500, "Cannot find users in DB"));
+    next(error);
   }
 };
 
@@ -58,7 +57,7 @@ export const postNewUser: RequestHandler = async (req, res, next) => {
     );
   } catch (error) {
     console.error(error);
-    next(createHttpError(500, "Cannot create new user"));
+    next(error);
   }
 };
 
@@ -110,7 +109,7 @@ export const postLoginUser: RequestHandler = async (req, res, next) => {
     );
   } catch (error) {
     console.error(error);
-    next(createHttpError(500, "Cannot log in user"));
+    next(error);
   }
 };
 
@@ -144,6 +143,6 @@ export const getUserDetails: RequestHandler = async (req, res, next) => {
     }
   } catch (error) {
     console.error(error);
-    next(createHttpError(500, "Cannot get user details"));
+    next(error);
   }
 };
