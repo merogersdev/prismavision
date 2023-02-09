@@ -14,9 +14,14 @@ DESC: Gets all users from DB
 ACCESS: Public
 */
 
-export const getAllUsers: RequestHandler = async (req, res, next) => {
+export const getAllUsers: RequestHandler = async (_req, res, next) => {
   try {
-    const allUsers = await prisma.user.findMany();
+    const allUsers = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+      },
+    });
     res.status(200).json(allUsers);
   } catch (error) {
     next(error);
@@ -56,7 +61,7 @@ export const postNewUser: RequestHandler = async (req, res, next) => {
 
 /*
 METHOD: POST
-DESC: Creates new users in DB
+DESC: Hashes password and creates new user in DB
 ACCESS: Public
 */
 

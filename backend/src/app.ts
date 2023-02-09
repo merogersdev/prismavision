@@ -1,5 +1,6 @@
 import express from "express";
 import userRoutes from "./routes/user";
+import imageRoutes from "./routes/image";
 import morgan from "morgan";
 import createHttpError from "http-errors";
 
@@ -27,6 +28,7 @@ app.use(morgan("tiny"));
 
 // Routes
 app.use("/api/users", userRoutes);
+app.use("/api/images", imageRoutes);
 
 // 404 Catch
 app.use((_req, _res, next) => {

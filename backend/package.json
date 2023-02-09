@@ -9,6 +9,7 @@
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
+    "@google-cloud/vision": "^3.1.0",
     "@prisma/client": "^4.9.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
