@@ -109,3 +109,36 @@ export const postLoginUser: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+/*
+METHOD: GET
+DESC: Gets user details
+ACCESS: Private
+*/
+
+export const getUserDetails: RequestHandler = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    if (!id) throw Error("No user ID found");
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: +id,
+      },
+      select: {
+        id: true,
+        email: true,
+        images: true,
+      },
+    });
+
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};

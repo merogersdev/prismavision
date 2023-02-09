@@ -4,8 +4,15 @@ import vision from "@google-cloud/vision";
 // Creates a client
 const client = new vision.ImageAnnotatorClient();
 
+/*
+METHOD: POST
+DESC: Sends URL to Vision API for label annotations.
+ACCESS: Private
+*/
+
 export const postProcessImage: RequestHandler = async (req, res, next) => {
   const { url } = req.body;
+  const { id } = res.locals.jwt;
   try {
     if (!url) throw Error("No image file found");
 
