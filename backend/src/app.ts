@@ -4,7 +4,7 @@ import imageRoutes from "./routes/image";
 import morgan from "morgan";
 import createHttpError from "http-errors";
 
-import { errorHandler } from "./middleware/errorHandler";
+import errorHandler from "./middleware/errorHandler";
 
 const app = express();
 

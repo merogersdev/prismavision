@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
 
-export const errorHandler = (
+const errorHandler = (
   error: unknown,
   _req: Request,
   res: Response,
@@ -17,3 +17,5 @@ export const errorHandler = (
   }
   res.status(statusCode).json({ error: errorMessage });
 };
+
+export default errorHandler;
