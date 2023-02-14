@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import server from '../../axios/server';
+import server from "../../axios/server";
 
 // Fetch user details from Local Storage, else return null value - Makes TypeScript happy.
 const getUser = () => {
-  const userDetails = localStorage.getItem('user');
+  const userDetails = localStorage.getItem("user");
   if (userDetails == null) return null;
   return JSON.parse(userDetails);
 };
@@ -24,7 +24,7 @@ const initialState: InitialStateProps = {
   isRegisterSuccess: false,
   isLoginSuccess: false,
   isLoading: false,
-  message: '',
+  message: "",
 };
 
 type Error = {
@@ -68,13 +68,13 @@ const errorHandler = (error: Error) => {
 
 // Register
 export const register = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async (userData, thunkAPI) => {
     try {
-      const response: Data = await server.post('/api/users/', userData);
+      const response: Data = await server.post("/api/users/", userData);
 
       if (response.data) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data));
       }
 
       return response.data;
@@ -86,12 +86,12 @@ export const register = createAsyncThunk(
 
 // Login
 export const login = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async (userData, thunkAPI) => {
     try {
-      const response = await server.post('/api/users/login', userData);
+      const response = await server.post("/api/users/login", userData);
       if (response.data) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data));
       }
       return response.data;
     } catch (error: any) {
@@ -100,12 +100,12 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  localStorage.removeItem('user');
+export const logout = createAsyncThunk("auth/logout", async () => {
+  localStorage.removeItem("user");
 });
 
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     reset: (state) => {
@@ -113,7 +113,7 @@ export const authSlice = createSlice({
       state.isError = false;
       state.isRegisterSuccess = false;
       state.isLoginSuccess = false;
-      state.message = '';
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
