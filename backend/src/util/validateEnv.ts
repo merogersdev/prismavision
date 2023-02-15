@@ -1,4 +1,4 @@
-import { cleanEnv, port, str } from "envalid";
+import { cleanEnv, port, str } from 'envalid';
 
 export default cleanEnv(process.env, {
   DATABASE_URL: str(),
@@ -6,4 +6,5 @@ export default cleanEnv(process.env, {
   PORT: port(),
   JWT_SECRET: str(),
   GOOGLE_APPLICATION_CREDENTIALS: str(),
+  NODE_ENV: str({ choices: ['development', 'production'] }),
 });

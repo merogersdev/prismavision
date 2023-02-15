@@ -1,12 +1,10 @@
-import { RequestHandler } from "express";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { RequestHandler } from 'express';
+import prisma from '../../prisma/client';
 
 /*
-METHOD: GET
-DESC: Gets total numbers for users and images
-ACCESS: Public
+METHOD:   GET
+DESC:     Gets total numbers for users and images
+ACCESS:   Public
 */
 
 export const getStats: RequestHandler = async (_req, res, next) => {
