@@ -1,17 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { AppDispatch } from '../app/store';
-import { logout, reset } from '../features/authSlice';
 
 export default function NavMenu() {
-  const { user } = useSelector((state: any) => state.auth);
+  const user = useAppSelector((state: any) => state.auth);
 
-  const dispatch = useDispatch<AppDispatch>();
+  // const onLogout = () => {
+  //   dispatch(logout());
+  //   dispatch(reset());
+  // };
 
-  const onLogout = () => {
-    dispatch(logout());
-    dispatch(reset());
-  };
   return (
     <ul className='hidden md:items-center md:flex md:flex-row md:bg-white md:relative md:top-0 md:pt-0 md:px-0 md:shadow-none text-xl font-semibold'>
       <li className='ml-0 py-2 md:ml-8 hover:text-secondary-200 transition ease-linear duration-100 '>

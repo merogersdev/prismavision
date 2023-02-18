@@ -1,11 +1,11 @@
-import authReducer from '../features/authSlice';
+import userReducer from '../features/user/userSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
 //TODO createListenerMiddleware for localStorage parsing
 
 const store = configureStore({
   reducer: {
-    auth: authReducer,
+    user: userReducer,
   },
 });
 

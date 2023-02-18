@@ -8,11 +8,13 @@ import morgan from 'morgan';
 import createHttpError from 'http-errors';
 import errorHandler from './middleware/errorHandler';
 import env from './util/validateEnv';
+import cors from 'cors';
 
 const app = express();
 
 // Parse JSON
 app.use(express.json());
+app.use(cors());
 
 // Log incoming requests in DEV mode
 if (env.NODE_ENV === 'development') {

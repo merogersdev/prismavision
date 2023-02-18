@@ -38,6 +38,20 @@ export const postNewUser: RequestHandler = async (req, res, next) => {
   try {
     if (!email) throw Error('Email required');
     if (!password) throw Error('Password required');
+
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        images: true,
+      },
+    });
+    if (userExists) throw Error('User already exists');
+
     bcrypt.hash(
       password,
       saltRounds,
