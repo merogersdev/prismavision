@@ -1,14 +1,17 @@
 import { NavLink } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { AppDispatch } from '../app/store';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector, AppDispatch } from '../app/store';
+import { logout } from '../features/auth/authSlice';
 
 export default function NavMenu() {
-  const user = useAppSelector((state: any) => state.auth);
+  const user = useTypedSelector((state: any) => state.auth.user);
 
-  // const onLogout = () => {
-  //   dispatch(logout());
-  //   dispatch(reset());
-  // };
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    dispatch(logout());
+    console.log('Logout Fired');
+  };
 
   return (
     <ul className='hidden md:items-center md:flex md:flex-row md:bg-white md:relative md:top-0 md:pt-0 md:px-0 md:shadow-none text-xl font-semibold'>

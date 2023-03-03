@@ -1,5 +1,9 @@
-import React, { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { useLoginMutation } from '../app/services/auth';
+import { setCredentials } from '../features/auth/authSlice';
+
 import { useNavigate } from 'react-router-dom';
 
 import { useFormik } from 'formik';
@@ -7,12 +11,12 @@ import * as Yup from 'yup';
 
 import { toast } from 'react-toastify';
 
-import { userLogin } from '../features/user/userSlice';
 import Loader from '../components/Loader';
 
 export default function Login() {
-  const { loading, error } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
+  const [login, { isLoading, isError, isSuccess, error }] = useLoginMutation();
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -28,40 +32,38 @@ export default function Login() {
         .min(6, 'Password must be longer than 6 characters')
         .required('Password is required'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const userData = {
         email: values.email,
         password: values.password,
       };
-      dispatch(userLogin(userData));
+
+      try {
+        const result = await login(userData);
+        if (result.data) {
+          dispatch(setCredentials(result.data));
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
     },
   });
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
+    if (isError) {
+      toast.error('Epic fail dude');
     }
-  }, [error]);
 
-  // useEffect(() => {
-  //   if (isError) {
-  //     toast.error(message);
-  //   }
-
-  //   if (isLoginSuccess) {
-  //     toast.success(`User ${user.email} logged in!`);
-  //     navigate('/dashboard');
-  //   }
-  // }, [user, isError, isLoginSuccess, message, dispatch]);
-
-  // if (isLoading) {
-  //   <Loader />;
-  // }
+    if (isSuccess) {
+      toast.success(`User logged in!`);
+      navigate('/dashboard');
+    }
+  }, [login, isError, isSuccess, error, dispatch]);
 
   return (
     <main className='container flex flex-col'>
-      {loading ? (
-        <h3>Loading...</h3>
+      {isLoading ? (
+        <Loader />
       ) : (
         <form
           className='card flex flex-col items-center'

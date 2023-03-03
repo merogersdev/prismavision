@@ -1,5 +1,9 @@
-import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { useSignupMutation } from '../app/services/auth';
+import { createCredentials } from '../features/auth/authSlice';
+
 import { useNavigate } from 'react-router-dom';
 
 import { useFormik } from 'formik';
@@ -7,17 +11,15 @@ import * as Yup from 'yup';
 
 import { toast } from 'react-toastify';
 
-import { userSignup } from '../features/user/userSlice';
 import Loader from '../components/Loader';
 
-type Register = {
-  email: string;
-  password: string;
-};
-
 export default function SignUp() {
-  const { loading, error } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
+  const [signup, { isLoading, isError, isSuccess, error }] =
+    useSignupMutation();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -36,40 +38,39 @@ export default function SignUp() {
         'Passwords must match'
       ),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       const userData = {
         email: values.email,
         password: values.password,
       };
-      dispatch(userSignup(userData));
-      resetForm();
+
+      try {
+        const result = await signup(userData);
+        if (result.data) {
+          dispatch(createCredentials(result.data));
+          resetForm();
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
     },
   });
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
+    if (isError) {
+      toast.error('Epic Fail Dude');
     }
-  }, [error]);
 
-  // useEffect(() => {
-  //   if (isError) {
-  //     toast.error(message);
-  //   }
-
-  //   if (isRegisterSuccess) {
-  //     toast.success(`User ${user.email} signed up successfully!`);
-  //   }
-  // }, [user, isError, isRegisterSuccess, message, dispatch]);
-
-  // if (isLoading) {
-  //   <Loader />;
-  // }
+    if (isSuccess) {
+      toast.success(`User signed up successfully!`);
+      navigate('/login');
+    }
+  }, [signup, isError, isSuccess, error, dispatch]);
 
   return (
     <main className='container flex flex-col'>
-      {loading ? (
-        <h3>Loading...</h3>
+      {isLoading ? (
+        <Loader />
       ) : (
         <form
           className='card flex flex-col items-center'

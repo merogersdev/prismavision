@@ -63,7 +63,7 @@ export const postNewUser: RequestHandler = async (req, res, next) => {
             password: hash,
           },
         });
-        res.sendStatus(201);
+        res.status(201).json({ message: 'User Created Successfully' });
       }
     );
   } catch (error) {
@@ -91,7 +91,6 @@ export const postLoginUser: RequestHandler = async (req, res, next) => {
         id: true,
         email: true,
         password: true,
-        images: true,
       },
     });
     if (!userExists) throw Error('User does not exist');
@@ -101,14 +100,15 @@ export const postLoginUser: RequestHandler = async (req, res, next) => {
       function (err, result) {
         if (err) throw Error('Failed to hash password');
         if (result) {
-          const loggedInUser = {
-            email,
+          res.status(200).json({
+            user: {
+              email: userExists.email,
+              id: userExists.id,
+            },
             token: jwt.sign({ id: userExists?.id || '' }, env.JWT_SECRET, {
               expiresIn: '1d',
             }),
-            images: userExists?.images,
-          };
-          res.status(200).json(loggedInUser);
+          });
         } else {
           res.status(400).json({ error: 'Invalid user credentials' });
         }
