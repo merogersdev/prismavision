@@ -1,20 +1,24 @@
 import 'dotenv/config';
 import pc from 'picocolors';
 import express from 'express';
-import userRoutes from './routes/user';
+import authRoutes from './routes/auth';
 import imageRoutes from './routes/image';
-import statRoutes from './routes/stat';
 import morgan from 'morgan';
 import createHttpError from 'http-errors';
 import errorHandler from './middleware/errorHandler';
-import env from './util/validateEnv';
+import env from './util/env';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import compression from 'compression';
+import options from './util/cors';
 
 const app = express();
 
-// Parse JSON
+// Primary Middleware
+app.use(cookieParser());
+app.use(compression());
 app.use(express.json());
-app.use(cors());
+app.use(cors(options));
 
 // Log incoming requests in DEV mode
 if (env.NODE_ENV === 'development') {
@@ -22,9 +26,8 @@ if (env.NODE_ENV === 'development') {
 }
 
 // Routes
-app.use('/api/users', userRoutes);
-app.use('/api/images', imageRoutes);
-app.use('/api/stats', statRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/image', imageRoutes);
 
 // 404 Catch
 app.use((_req, _res, next) => {

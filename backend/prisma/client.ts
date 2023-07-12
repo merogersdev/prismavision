@@ -1,21 +1,18 @@
+import env from '../src/util/env';
 import { PrismaClient } from '@prisma/client';
-import env from '../src/util/validateEnv';
 
-// I'm Globul
-declare global {
-  namespace NodeJS {
-    interface Global {}
-  }
-}
+declare let global: unknown;
 
-interface CustomNodeJsGlobal extends NodeJS.Global {
-  prisma: PrismaClient;
-}
+const globalForPrisma = global as {
+  prisma: PrismaClient | undefined;
+};
 
-declare const global: CustomNodeJsGlobal;
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: ['query'],
+  });
 
-const prisma = global.prisma || new PrismaClient();
-
-if (env.NODE_ENV === 'development') global.prisma = prisma;
+if (env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 export default prisma;

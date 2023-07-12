@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import env from '../util/validateEnv';
+import env from '../util/env';
 import prisma from '../../prisma/client';
 
 const saltRounds: number = 10;

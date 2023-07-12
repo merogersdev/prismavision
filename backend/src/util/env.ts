@@ -5,6 +5,7 @@ export default cleanEnv(process.env, {
   CLIENT_URL: str(),
   PORT: port(),
   JWT_SECRET: str(),
-  GOOGLE_APPLICATION_CREDENTIALS: str(),
+  CRYPTO_SECRET: str(),
+  // GOOGLE_APPLICATION_CREDENTIALS: str(),
   NODE_ENV: str({ choices: ['development', 'production'] }),
 });

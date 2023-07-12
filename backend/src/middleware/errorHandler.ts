@@ -1,21 +1,14 @@
-import { NextFunction, Request, Response } from "express";
-import { isHttpError } from "http-errors";
+import { ErrorRequestHandler } from 'express';
 
-const errorHandler = (
-  error: unknown,
-  _req: Request,
-  res: Response,
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _next: NextFunction
-) => {
-  console.error(error);
-  let errorMessage = "An unknown error occurred";
-  let statusCode = 500;
-  if (isHttpError(error)) {
-    statusCode = error.status;
-    errorMessage = error.message;
-  }
-  res.status(statusCode).json({ error: errorMessage });
+const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
+  const status = error.statusCode || 500;
+  const message = error.message || 'Something went wrong';
+  res.status(status).json({
+    success: false,
+    status,
+    message,
+    stack: process.env.NODE_ENV === 'development' ? error.stack : {},
+  });
 };
 
 export default errorHandler;
