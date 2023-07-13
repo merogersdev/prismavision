@@ -93,6 +93,7 @@ export const refresh: RequestHandler = async (req, res, next) => {
   }
 
   try {
+    //! Any - Bad
     const decoded: any = jwt.verify(refreshToken, process.env.SECRET);
     const accessToken = jwt.sign({ user: decoded.id }, process.env.SECRET, {
       expiresIn: '1h',
