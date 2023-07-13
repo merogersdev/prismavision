@@ -8,12 +8,15 @@ datasource db {
 }
 
 model User {
-  id     Int     @id @default(autoincrement())
-  email  String  @unique @db.VarChar(128)
-  hash   String  @db.VarChar(256)
-  salt   String  @db.VarChar(256)
-  token  String  @db.VarChar(256)
-  images Image[]
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  password     String
+  salt         String
+  sessionToken String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  images       Image[]
 
   @@map("user")
 }

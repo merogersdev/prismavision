@@ -1,102 +1,104 @@
 import { RequestHandler } from 'express';
-import { prisma } from '../../prisma/client';
-import createHttpError from 'http-errors';
-import { authentication, random } from '../util/auth';
+import createError from 'http-errors';
+import jwt from 'jsonwebtoken';
+import { createUser, getUserByEmail, updateUserById } from '../util/user';
+import { hashString } from '../util/crypto';
+import env from '../util/env';
 
-export const registerUser: RequestHandler = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return next(createHttpError(400, 'Missing Fields'));
-  }
-
-  try {
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email: email.toString(),
-      },
-      select: {
-        id: true,
-        email: true,
-        salt: true,
-      },
-    });
-
-    if (userExists !== null) {
-      return next(createHttpError(400, 'User already exists'));
-    }
-    const salt = random();
-
-    await prisma.user.create({
-      data: {
-        email,
-        salt,
-        hash: authentication(salt, password),
-        token: authentication(salt, userExists.id.toString()),
-      },
-    });
-
-    return res.status(201).json({ message: 'User created successfully' });
-  } catch (error) {
-    next(error);
-  }
-};
-
+// --- Log in User --- //
 export const loginUser: RequestHandler = async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return next(createHttpError(400, 'Missing Fields'));
-  }
   try {
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email: email.toString(),
-      },
-      select: {
-        email: true,
-        hash: true,
-        salt: true,
-        id: true,
-        token: true,
-      },
-    });
-
-    if (userExists === null) {
-      return next(createHttpError(404, 'User not found'));
+    if (email === undefined || email.length < 6 || !email.includes('@')) {
+      return next(createError(400, 'Missing or invalid email'));
     }
 
-    const expectedHash = authentication(userExists.salt, password);
-
-    if (userExists.hash != expectedHash) {
-      return next(createHttpError(401, 'Unauthorized'));
+    if (password === undefined || password.length < 6) {
+      return next(
+        createError(400, 'Password must be longer than 6 characters')
+      );
     }
+    const user = await getUserByEmail(email);
+    if (user === null) return next(createError(404, 'User not found'));
+    const expectedHash = hashString(user.salt, password);
+    if (user.password !== expectedHash)
+      return next(createError(401, 'Invalid password'));
 
-    const updatedUser = await prisma.user.update({
-      where: {
-        email: email.toString(),
-      },
-      data: {
-        token: authentication(userExists.salt, userExists.id.toString()),
-      },
+    const accessToken = jwt.sign({ id: user.id }, env.CRYPTO_SECRET, {
+      expiresIn: '1h',
+    });
+    const refreshToken = jwt.sign({ id: user.id }, env.CRYPTO_SECRET, {
+      expiresIn: '1d',
     });
 
-    res.cookie(
-      'PrismaVision',
-      authentication(userExists.salt, userExists.id.toString()),
-      {
-        domain: 'localhost',
-        path: '/',
-      }
-    );
-
-    return res.status(200).json({
-      user: {
-        id: userExists.id,
-        email: userExists.email,
-      },
+    const sessionUser = await updateUserById(user.id, {
+      sessionToken: refreshToken,
     });
+
+    const userData = {
+      id: sessionUser.id,
+      name: sessionUser.name,
+      email: sessionUser.email,
+    };
+
+    res.header('Authorization', accessToken);
+
+    res.cookie('refreshToken', refreshToken, {
+      secure: env.NODE_ENV !== 'development',
+      httpOnly: true,
+      sameSite: 'strict',
+    });
+
+    return res.status(200).json({ user: userData });
   } catch (error) {
-    next(error);
+    return next(createError(500, 'Failed to log in user'));
+  }
+};
+
+// --- Register User --- //
+export const registerUser: RequestHandler = async (req, res, next) => {
+  const { email, name, password } = req.body;
+
+  try {
+    if (email === undefined || email.length < 6 || !email.includes('@')) {
+      return next(createError(400, 'Missing or invalid email'));
+    }
+
+    if (name === undefined || name.length < 1)
+      return next(createError(400, 'Name must be longer than 1 character'));
+
+    if (password === undefined || password.length < 6) {
+      return next(
+        createError(400, 'Password must be longer than 6 characters')
+      );
+    }
+    const newUser = await createUser({ email, name, password });
+
+    return res.status(200).json({ newUser });
+  } catch (error) {
+    return next(createError(500, 'Failed to register user'));
+  }
+};
+
+// --- Refresh Token --- //
+
+export const refresh: RequestHandler = async (req, res, next) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    return next(createError(401, 'Access denied. No refresh token'));
+  }
+
+  try {
+    //! Any - Bad
+    const decoded: any = jwt.verify(refreshToken, process.env.SECRET);
+    const accessToken = jwt.sign({ user: decoded.user }, process.env.SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.header('Authorization', accessToken).send(decoded.user);
+  } catch (error) {
+    return next(createError(400, 'Invalid refresh token'));
   }
 };

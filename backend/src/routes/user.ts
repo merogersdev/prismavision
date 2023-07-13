@@ -1,20 +1,13 @@
-import express from "express";
-import extractJWT from "../middleware/extractJWT";
+import express from 'express';
 
-import {
-  getAllUsers,
-  postLoginUser,
-  postNewUser,
-  getUserDetails,
-} from "../controllers/user";
+import getAllUsers, { getUserProfile, deleteUser } from '../controllers/user';
+
+// Only check for ownership on params routes.
+import { isOwner } from '../middleware/auth';
 
 const router = express.Router();
 
-router.get("/", getAllUsers);
-router.post("/", postNewUser);
-
-router.post("/login", postLoginUser);
-
-router.get("/:id", extractJWT, getUserDetails);
+router.route('/').get(getAllUsers);
+router.route('/:id').get(isOwner, getUserProfile).delete(isOwner, deleteUser);
 
 export default router;

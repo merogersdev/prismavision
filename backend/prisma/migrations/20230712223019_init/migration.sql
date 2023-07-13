@@ -2,7 +2,9 @@
 CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
     "email" VARCHAR(128) NOT NULL,
-    "password" VARCHAR(128) NOT NULL,
+    "hash" VARCHAR(256) NOT NULL,
+    "salt" VARCHAR(256) NOT NULL,
+    "token" VARCHAR(256) NOT NULL,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -10,7 +12,7 @@ CREATE TABLE "user" (
 -- CreateTable
 CREATE TABLE "image" (
     "id" SERIAL NOT NULL,
-    "description" VARCHAR(128) NOT NULL,
+    "description" VARCHAR(256) NOT NULL,
     "percentage" INTEGER NOT NULL DEFAULT 0,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "user_id" INTEGER NOT NULL,
