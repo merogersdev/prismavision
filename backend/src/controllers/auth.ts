@@ -15,15 +15,12 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     }
 
     if (password === undefined || password.length < 6) {
-      return next(
-        createError(400, 'Password must be longer than 6 characters')
-      );
+      return next(createError(400, 'Password must be longer than 6 characters'));
     }
     const user = await getUserByEmail(email);
     if (user === null) return next(createError(404, 'User not found'));
     const expectedHash = hashString(user.salt, password);
-    if (user.password !== expectedHash)
-      return next(createError(401, 'Invalid password'));
+    if (user.password !== expectedHash) return next(createError(401, 'Invalid password'));
 
     const accessToken = jwt.sign({ id: user.id }, env.CRYPTO_SECRET, {
       expiresIn: '1h',
@@ -65,13 +62,10 @@ export const registerUser: RequestHandler = async (req, res, next) => {
       return next(createError(400, 'Missing or invalid email'));
     }
 
-    if (name === undefined || name.length < 1)
-      return next(createError(400, 'Name must be longer than 1 character'));
+    if (name === undefined || name.length < 1) return next(createError(400, 'Name must be longer than 1 character'));
 
     if (password === undefined || password.length < 6) {
-      return next(
-        createError(400, 'Password must be longer than 6 characters')
-      );
+      return next(createError(400, 'Password must be longer than 6 characters'));
     }
     const newUser = await createUser({ email, name, password });
 
@@ -92,12 +86,12 @@ export const refresh: RequestHandler = async (req, res, next) => {
 
   try {
     //! Any - Bad
-    const decoded: any = jwt.verify(refreshToken, process.env.SECRET);
-    const accessToken = jwt.sign({ user: decoded.user }, process.env.SECRET, {
+    const decoded = jwt.verify(refreshToken, process.env.SECRET) as jwt.JwtPayload;
+    const accessToken = jwt.sign({ user: decoded.id }, process.env.SECRET, {
       expiresIn: '1h',
     });
 
-    res.header('Authorization', accessToken).send(decoded.user);
+    return res.header('Authorization', accessToken).send(decoded.id);
   } catch (error) {
     return next(createError(400, 'Invalid refresh token'));
   }

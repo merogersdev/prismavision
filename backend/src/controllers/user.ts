@@ -19,7 +19,7 @@ const getAllUsers: RequestHandler = async (_req, res, next) => {
 export const getUserProfile: RequestHandler = async (
   req: TokenRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const { id } = req.params;
   try {
