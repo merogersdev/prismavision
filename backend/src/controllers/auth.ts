@@ -52,7 +52,6 @@ export const loginUser: RequestHandler = async (req, res, next) => {
 
     return res.status(200).json({ user: userData });
   } catch (error) {
-    console.log(error);
     return next(createError(500, 'Failed to log in user'));
   }
 };
@@ -78,7 +77,6 @@ export const registerUser: RequestHandler = async (req, res, next) => {
 
     return res.status(200).json({ newUser });
   } catch (error) {
-    console.log(error);
     return next(createError(500, 'Failed to register user'));
   }
 };
@@ -95,11 +93,11 @@ export const refresh: RequestHandler = async (req, res, next) => {
   try {
     //! Any - Bad
     const decoded: any = jwt.verify(refreshToken, process.env.SECRET);
-    const accessToken = jwt.sign({ user: decoded.id }, process.env.SECRET, {
+    const accessToken = jwt.sign({ user: decoded.user }, process.env.SECRET, {
       expiresIn: '1h',
     });
 
-    res.header('Authorization', accessToken).send(decoded.id);
+    res.header('Authorization', accessToken).send(decoded.user);
   } catch (error) {
     return next(createError(400, 'Invalid refresh token'));
   }

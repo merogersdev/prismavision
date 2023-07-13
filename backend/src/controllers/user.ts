@@ -23,11 +23,10 @@ export const getUserProfile: RequestHandler = async (
 ) => {
   const { id } = req.params;
   try {
-    const user = await getUserById(+id);
+    const user = await getUserById(Number(id));
     if (user === null) return next(createError(404, 'User not found'));
     return res.status(200).json({ user });
   } catch (error) {
-    console.log(error);
     return next(createError(500, 'Failed to get user profile'));
   }
 };
@@ -36,9 +35,9 @@ export const getUserProfile: RequestHandler = async (
 export const deleteUser: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = await getUserById(+id);
+    const user = await getUserById(Number(id));
     if (user === null) return next(createError(404, 'User not found '));
-    await deleteUserById(+id);
+    await deleteUserById(Number(id));
     return res.status(200);
   } catch (error) {
     return next(createError(500, 'Failed to delete user'));
