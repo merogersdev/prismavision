@@ -1,11 +1,9 @@
-import express from "express";
-import extractJWT from "../middleware/extractJWT";
+import express from 'express';
 
-import { postProcessImage } from "../controllers/image";
+import { postProcessImage } from '../controllers/image';
 
 const router = express.Router();
 
-router.post("/", postProcessImage);
-router.get("/", extractJWT);
+router.post('/', postProcessImage);
 
 export default router;
