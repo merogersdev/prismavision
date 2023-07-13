@@ -1,5 +1,5 @@
-import env from '../src/util/env';
 import { PrismaClient } from '@prisma/client';
+import env from '../src/util/env';
 
 declare let global: unknown;
 

@@ -18,7 +18,6 @@ const errorHandler: ErrorRequestHandler = (error, _req, res, next) => {
 };
 
 // Handle Endpoint Not Found
-export const notFound: RequestHandler = (_req, _res, next) =>
-  next(createError(404, 'Endpoint not found'));
+export const notFound: RequestHandler = (_req, _res, next) => next(createError(404, 'Endpoint not found'));
 
 export default errorHandler;

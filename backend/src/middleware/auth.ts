@@ -1,16 +1,10 @@
 import { NextFunction, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
-import env from '../util/env';
-
 import createError from 'http-errors';
-
+import env from '../util/env';
 import { TokenRequest, TokenResponse } from '../types';
 
-const isAuthenticated = (
-  req: TokenRequest,
-  res: TokenResponse,
-  next: NextFunction
-) => {
+const isAuthenticated = (req: TokenRequest, res: TokenResponse, next: NextFunction) => {
   const accessToken = req.headers.authorization;
   const { refreshToken } = req.cookies;
 
@@ -23,12 +17,11 @@ const isAuthenticated = (
   }
 
   try {
-    //! Fix Any - Bad.
-    const decoded: any = jwt.verify(accessToken, env.CRYPTO_SECRET);
+    const decoded = jwt.verify(accessToken, env.CRYPTO_SECRET) as jwt.JwtPayload;
 
-    req.user = decoded.user;
+    req.user = decoded.id;
 
-    const newAccessToken = jwt.sign({ user: decoded.user }, env.CRYPTO_SECRET, {
+    const newAccessToken = jwt.sign({ user: decoded.id }, env.CRYPTO_SECRET, {
       expiresIn: '1h',
     });
 
@@ -37,7 +30,7 @@ const isAuthenticated = (
       sameSite: 'strict',
     });
     res.header('Authorization', newAccessToken);
-    next();
+    return next();
   } catch (error) {
     return next(createError(400, 'Invalid Tokens'));
   }
@@ -56,8 +49,7 @@ export const isOwner: RequestHandler = (req, _res, next) => {
   }
 
   try {
-    //! Fix Any - Bad
-    const decoded: any = jwt.verify(accessToken, env.CRYPTO_SECRET);
+    const decoded = jwt.verify(accessToken, env.CRYPTO_SECRET) as jwt.JwtPayload;
 
     if (decoded.id !== Number(id)) {
       return next(createError(401, 'Access Denied. Not owner'));
